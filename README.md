@@ -81,6 +81,3 @@ This project is licensed under the **MIT License** – see the [LICENSE](./LICEN
 * Use database (MySQL / MongoDB) instead of localStorage
 * Add email verification & password reset
 * Improve UI with frameworks (Bootstrap / Tailwind CSS)
-
-
-```
