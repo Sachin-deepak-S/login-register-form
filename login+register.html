@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 350px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+      box-sizing: border-box;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    /* Remove browser’s default password reveal button */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear,
+    input[type="password"]::-webkit-credentials-auto-fill-button,
+    input[type="password"]::-webkit-textfield-decoration-container {
+      display: none !important;
+    }
+
+    .password-container {
+      position: relative;
+      width: 100%;
+      margin: 8px 0;
+    }
+
+    .password-container input {
+      padding-right: 40px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 16px;
+      color: #007bff;
+    }
+
+    .strength {
+      font-size: 13px;
+      margin-top: 4px;
+      font-weight: bold;
+    }
+
+    .strength-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 4px;
+      background: #ddd;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+
+    .strength-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: red;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+
+    .confirm-msg {
+      font-size: 13px;
+      margin-top: 4px;
+      font-weight: bold;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 12px;
+      cursor: pointer;
+      color: #007bff;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    /* Popup Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: -300px;
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+      transition: right 0.5s ease-in-out;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      right: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Form -->
+  <div class="container" id="login-container">
+    <h2>Login</h2>
+    <input type="text" id="loginUsername" placeholder="Username" required>
+    <div class="password-container">
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <span class="toggle-password" onclick="togglePassword('loginPassword', this)">👁</span>
+    </div>
+    <button onclick="login()">Login</button>
+    <div class="toggle" onclick="showRegister()">Create an account</div>
+    <div class="message" id="loginMessage"></div>
+  </div>
+
+  <!-- Register Form -->
+  <div class="container" id="register-container" style="display:none;">
+    <h2>Register</h2>
+    <input type="text" id="regUsername" placeholder="Username" required>
+    <input type="text" id="regName" placeholder="Full Name" required>
+    <input type="date" id="regDob" required>
+    <input type="email" id="regEmail" placeholder="Email" required>
+    
+    <div class="password-container">
+      <input type="password" id="regPassword" placeholder="Password" required oninput="checkStrength()">
+      <span class="toggle-password" onclick="togglePassword('regPassword', this)">👁</span>
+    </div>
+    <div class="strength" id="strength"></div>
+    <div class="strength-bar"><div class="strength-bar-fill" id="strengthBar"></div></div>
+    
+    <div class="password-container">
+      <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required oninput="checkConfirmPassword()">
+      <span class="toggle-password" onclick="togglePassword('regConfirmPassword', this)">👁</span>
+    </div>
+    <div class="confirm-msg" id="confirmMsg"></div>
+
+    <button onclick="register()">Register</button>
+    <div class="toggle" onclick="showLogin()">Back to Login</div>
+    <div class="message" id="registerMessage"></div>
+  </div>
+
+  <!-- Popup Notification -->
+  <div class="notification" id="notification">Login successful 🎉</div>
+
+  <script>
+    // Show Register Form
+    function showRegister() {
+      document.getElementById("login-container").style.display = "none";
+      document.getElementById("register-container").style.display = "block";
+    }
+
+    // Show Login Form
+    function showLogin() {
+      document.getElementById("register-container").style.display = "none";
+      document.getElementById("login-container").style.display = "block";
+    }
+
+    // Toggle Password Visibility
+    function togglePassword(id, element) {
+      const input = document.getElementById(id);
+      if (input.type === "password") {
+        input.type = "text";
+        element.textContent = "🙈";
+      } else {
+        input.type = "password";
+        element.textContent = "👁";
+      }
+    }
+
+    // Password Strength Checker
+    function checkStrength() {
+      let password = document.getElementById("regPassword").value;
+      let strengthText = document.getElementById("strength");
+      let strengthBar = document.getElementById("strengthBar");
+
+      if (password.length === 0) {
+        strengthText.innerHTML = "";
+        strengthBar.style.width = "0%";
+        return;
+      }
+
+      let strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+      let mediumRegex = /^(?=.*[a-z])(?=.*[0-9]).{6,}$/;
+
+      if (strongRegex.test(password)) {
+        strengthText.innerHTML = "Strong 🔒";
+        strengthText.style.color = "green";
+        strengthBar.style.width = "100%";
+        strengthBar.style.background = "green";
+      } else if (mediumRegex.test(password)) {
+        strengthText.innerHTML = "Medium ⚠️";
+        strengthText.style.color = "orange";
+        strengthBar.style.width = "66%";
+        strengthBar.style.background = "orange";
+      } else {
+        strengthText.innerHTML = "Weak ❌";
+        strengthText.style.color = "red";
+        strengthBar.style.width = "33%";
+        strengthBar.style.background = "red";
+      }
+    }
+
+    // Confirm Password Live Check
+    function checkConfirmPassword() {
+      let password = document.getElementById("regPassword").value;
+      let confirmPassword = document.getElementById("regConfirmPassword").value;
+      let confirmMsg = document.getElementById("confirmMsg");
+
+      if (confirmPassword.length === 0) {
+        confirmMsg.innerHTML = "";
+        return;
+      }
+
+      if (password === confirmPassword) {
+        confirmMsg.innerHTML = "✅ Passwords match";
+        confirmMsg.style.color = "green";
+      } else {
+        confirmMsg.innerHTML = "❌ Passwords do not match";
+        confirmMsg.style.color = "red";
+      }
+    }
+
+    // Register Function
+    function register() {
+      let username = document.getElementById("regUsername").value.trim();
+      let name = document.getElementById("regName").value.trim();
+      let dob = document.getElementById("regDob").value;
+      let email = document.getElementById("regEmail").value.trim();
+      let password = document.getElementById("regPassword").value.trim();
+      let confirmPassword = document.getElementById("regConfirmPassword").value.trim();
+
+      let registerMessage = document.getElementById("registerMessage");
+
+      if (!username || !name || !dob || !email || !password || !confirmPassword) {
+        registerMessage.innerHTML = "⚠️ Please fill all fields.";
+        registerMessage.style.color = "red";
+        return;
+      }
+
+      // DOB check (must not be in the future)
+      let birthDate = new Date(dob);
+      let today = new Date();
+      if (birthDate > today) {
+        registerMessage.innerHTML = "⚠️ DOB cannot be in the future.";
+        registerMessage.style.color = "red";
+        return;
+      }
+
+      // Confirm password check
+      if (password !== confirmPassword) {
+        registerMessage.innerHTML = "⚠️ Passwords do not match.";
+        registerMessage.style.color = "red";
+        return;
+      }
+
+      // Prevent duplicate usernames
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      if (users.some(u => u.username === username)) {
+        registerMessage.innerHTML = "⚠️ Username already exists.";
+        registerMessage.style.color = "red";
+        return;
+      }
+
+      users.push({ username, name, dob, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      registerMessage.innerHTML = "✅ Registration successful!";
+      registerMessage.style.color = "green";
+
+      setTimeout(() => showLogin(), 1000);
+    }
+
+    // Login Function
+    function login() {
+      let username = document.getElementById("loginUsername").value.trim();
+      let password = document.getElementById("loginPassword").value.trim();
+
+      let loginMessage = document.getElementById("loginMessage");
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      let user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        loginMessage.innerHTML = "";
+        showNotification("Login successful 🎉");
+        setTimeout(() => {
+          window.location.href = "main.html"; // Redirect after login
+        }, 1500);
+      } else {
+        loginMessage.innerHTML = "❌ Invalid username or password.";
+        loginMessage.style.color = "red";
+      }
+    }
+
+    // Popup Notification
+    function showNotification(message) {
+      let notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.classList.add("show");
+
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 3000);
+    }
+
+    // Restrict username (no spaces, allow backspace/delete)
+    function restrictUsernameInput(inputId) {
+      document.getElementById(inputId).addEventListener("keydown", function(e) {
+        if (e.key === " ") {   // Block spaces only
+          e.preventDefault();
+        }
+      });
+    }
+
+    restrictUsernameInput("regUsername");
+    restrictUsernameInput("loginUsername");
+
+    // Set max date for DOB input to today
+    window.onload = function() {
+      let today = new Date().toISOString().split("T")[0];
+      document.getElementById("regDob").setAttribute("max", today);
+    };
+  </script>
+</body>
+</html>
