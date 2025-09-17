@@ -18,7 +18,7 @@ It uses **localStorage** to store user data (for demo/learning purposes only).
 ---
 
 ## 🚀 Live Demo
-👉 [Click here to view the site](https://Sachin-deepak-S.github.io/login-register-form/)  
+👉 [Click here to view the site](https://sachin-deepak-s.github.io/login-register-form/)  
 
 *(If the link doesn’t work yet, enable GitHub Pages in repo settings → Pages → Source: `main` → `/ (root)`)*
 
