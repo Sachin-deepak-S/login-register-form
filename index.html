@@ -4,59 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login & Register</title>
+
+  <!-- ✅ Font Awesome for Eye Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      height: 100vh;
       margin: 0;
     }
 
     .container {
       background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 350px;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-      box-sizing: border-box;
-      animation: fadeIn 0.4s ease-in-out;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      width: 380px;
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
+      margin-bottom: 25px;
+      color: #222;
+      font-size: 24px;
+      font-weight: 600;
     }
 
-    input {
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 14px;
+      padding-right: 45px;
+      border: 1px solid #ddd;
       border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
       box-sizing: border-box;
     }
 
-    /* Remove browser’s default password reveal button */
-    input[type="password"]::-ms-reveal,
-    input[type="password"]::-ms-clear,
-    input[type="password"]::-webkit-credentials-auto-fill-button,
-    input[type="password"]::-webkit-textfield-decoration-container {
-      display: none !important;
-    }
-
-    .password-container {
-      position: relative;
-      width: 100%;
-      margin: 8px 0;
-    }
-
-    .password-container input {
-      padding-right: 40px;
+    .input-group input:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 6px rgba(0,123,255,0.4);
     }
 
     .toggle-password {
@@ -66,312 +71,231 @@
       transform: translateY(-50%);
       cursor: pointer;
       font-size: 16px;
-      color: #007bff;
+      color: #555;
+      user-select: none;
+      transition: 0.3s;
+    }
+
+    .toggle-password:hover {
+      color: #007BFF;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #007BFF, #0056b3);
+      border: none;
+      color: #fff;
+      padding: 14px;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .toggle-link {
+      margin-top: 18px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #007BFF;
+      display: inline-block;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
     }
 
     .strength {
       font-size: 13px;
-      margin-top: 4px;
-      font-weight: bold;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      text-align: left;
     }
 
-    .strength-bar {
-      width: 100%;
-      height: 6px;
-      border-radius: 4px;
-      background: #ddd;
-      margin-top: 4px;
-      overflow: hidden;
-    }
-
-    .strength-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: red;
-      transition: width 0.3s ease, background 0.3s ease;
-    }
-
-    .confirm-msg {
-      font-size: 13px;
-      margin-top: 4px;
-      font-weight: bold;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      border: none;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    .toggle {
-      text-align: center;
-      margin-top: 12px;
-      cursor: pointer;
-      color: #007bff;
-    }
-
-    .message {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    /* Popup Notification */
-    .notification {
+    .popup {
       position: fixed;
       top: 20px;
-      right: -300px;
-      background: #28a745;
-      color: white;
+      right: 20px;
       padding: 12px 20px;
       border-radius: 8px;
-      font-weight: bold;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-      transition: right 0.5s ease-in-out;
-      z-index: 1000;
+      color: #fff;
+      display: none;
+      font-size: 14px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: slideIn 0.4s ease;
     }
 
-    .notification.show {
-      right: 20px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
     }
   </style>
 </head>
 <body>
-  <!-- Login Form -->
-  <div class="container" id="login-container">
-    <h2>Login</h2>
-    <input type="text" id="loginUsername" placeholder="Username" required>
-    <div class="password-container">
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <span class="toggle-password" onclick="togglePassword('loginPassword', this)">👁</span>
-    </div>
-    <button onclick="login()">Login</button>
-    <div class="toggle" onclick="showRegister()">Create an account</div>
-    <div class="message" id="loginMessage"></div>
+  <div class="container">
+    <!-- Login Form -->
+    <form id="loginForm">
+      <h2>Login</h2>
+      <div class="input-group">
+        <input type="text" id="loginUsername" placeholder="Username" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePassword('loginPassword', this)">
+          <i class="fa-solid fa-eye"></i>
+        </span>
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <p class="toggle-link" onclick="toggleForm('registerForm')">Don't have an account? Register</p>
+    </form>
+
+    <!-- Register Form -->
+    <form id="registerForm" style="display: none;">
+      <h2>Register</h2>
+      <div class="input-group">
+        <input type="text" id="regUsername" placeholder="Username" required>
+      </div>
+      <div class="input-group">
+        <input type="email" id="regEmail" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <input type="date" id="regDOB" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="regPassword" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePassword('regPassword', this)">
+          <i class="fa-solid fa-eye"></i>
+        </span>
+      </div>
+      <div class="strength" id="strengthMsg"></div>
+      <div class="input-group">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">
+          <i class="fa-solid fa-eye"></i>
+        </span>
+      </div>
+      <div class="strength" id="confirmMsg"></div>
+      <button type="submit" class="btn">Register</button>
+      <p class="toggle-link" onclick="toggleForm('loginForm')">Already have an account? Login</p>
+    </form>
   </div>
 
-  <!-- Register Form -->
-  <div class="container" id="register-container" style="display:none;">
-    <h2>Register</h2>
-    <input type="text" id="regUsername" placeholder="Username" required>
-    <input type="text" id="regName" placeholder="Full Name" required>
-    <input type="date" id="regDob" required>
-    <input type="email" id="regEmail" placeholder="Email" required>
-    
-    <div class="password-container">
-      <input type="password" id="regPassword" placeholder="Password" required oninput="checkStrength()">
-      <span class="toggle-password" onclick="togglePassword('regPassword', this)">👁</span>
-    </div>
-    <div class="strength" id="strength"></div>
-    <div class="strength-bar"><div class="strength-bar-fill" id="strengthBar"></div></div>
-    
-    <div class="password-container">
-      <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required oninput="checkConfirmPassword()">
-      <span class="toggle-password" onclick="togglePassword('regConfirmPassword', this)">👁</span>
-    </div>
-    <div class="confirm-msg" id="confirmMsg"></div>
-
-    <button onclick="register()">Register</button>
-    <div class="toggle" onclick="showLogin()">Back to Login</div>
-    <div class="message" id="registerMessage"></div>
-  </div>
-
-  <!-- Popup Notification -->
-  <div class="notification" id="notification">Login successful 🎉</div>
+  <!-- Popup -->
+  <div class="popup" id="popup"></div>
 
   <script>
-    // Show Register Form
-    function showRegister() {
-      document.getElementById("login-container").style.display = "none";
-      document.getElementById("register-container").style.display = "block";
+    // Toggle between forms
+    function toggleForm(formId) {
+      document.getElementById("loginForm").style.display = formId === "loginForm" ? "block" : "none";
+      document.getElementById("registerForm").style.display = formId === "registerForm" ? "block" : "none";
     }
 
-    // Show Login Form
-    function showLogin() {
-      document.getElementById("register-container").style.display = "none";
-      document.getElementById("login-container").style.display = "block";
-    }
-
-    // Toggle Password Visibility
-    function togglePassword(id, element) {
-      const input = document.getElementById(id);
+    // Password toggle
+    function togglePassword(inputId, icon) {
+      const input = document.getElementById(inputId);
+      const eyeIcon = icon.querySelector("i");
       if (input.type === "password") {
         input.type = "text";
-        element.textContent = "🙈";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
       } else {
         input.type = "password";
-        element.textContent = "👁";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
       }
     }
 
-    // Password Strength Checker
-    function checkStrength() {
-      let password = document.getElementById("regPassword").value;
-      let strengthText = document.getElementById("strength");
-      let strengthBar = document.getElementById("strengthBar");
+    // Popup function
+    function showPopup(message, success = true) {
+      const popup = document.getElementById("popup");
+      popup.textContent = message;
+      popup.style.background = success ? "#28a745" : "#dc3545";
+      popup.style.display = "block";
+      setTimeout(() => popup.style.display = "none", 3000);
+    }
 
-      if (password.length === 0) {
-        strengthText.innerHTML = "";
-        strengthBar.style.width = "0%";
-        return;
-      }
-
-      let strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/;
-      let mediumRegex = /^(?=.*[a-z])(?=.*[0-9]).{6,}$/;
-
-      if (strongRegex.test(password)) {
-        strengthText.innerHTML = "Strong 🔒";
-        strengthText.style.color = "green";
-        strengthBar.style.width = "100%";
-        strengthBar.style.background = "green";
-      } else if (mediumRegex.test(password)) {
-        strengthText.innerHTML = "Medium ⚠️";
-        strengthText.style.color = "orange";
-        strengthBar.style.width = "66%";
-        strengthBar.style.background = "orange";
+    // Password strength checker
+    document.getElementById("regPassword").addEventListener("input", function() {
+      const val = this.value;
+      const msg = document.getElementById("strengthMsg");
+      if (val.length < 6) {
+        msg.textContent = "Weak ❌";
+        msg.style.color = "red";
+      } else if (val.match(/[A-Z]/) && val.match(/[0-9]/)) {
+        msg.textContent = "Strong ✅";
+        msg.style.color = "green";
       } else {
-        strengthText.innerHTML = "Weak ❌";
-        strengthText.style.color = "red";
-        strengthBar.style.width = "33%";
-        strengthBar.style.background = "red";
+        msg.textContent = "Medium ⚠️";
+        msg.style.color = "orange";
       }
-    }
+    });
 
-    // Confirm Password Live Check
-    function checkConfirmPassword() {
-      let password = document.getElementById("regPassword").value;
-      let confirmPassword = document.getElementById("regConfirmPassword").value;
-      let confirmMsg = document.getElementById("confirmMsg");
-
-      if (confirmPassword.length === 0) {
-        confirmMsg.innerHTML = "";
-        return;
-      }
-
-      if (password === confirmPassword) {
-        confirmMsg.innerHTML = "✅ Passwords match";
-        confirmMsg.style.color = "green";
+    // Confirm password check
+    document.getElementById("confirmPassword").addEventListener("input", function() {
+      const msg = document.getElementById("confirmMsg");
+      if (this.value === document.getElementById("regPassword").value) {
+        msg.textContent = "Passwords match ✅";
+        msg.style.color = "green";
       } else {
-        confirmMsg.innerHTML = "❌ Passwords do not match";
-        confirmMsg.style.color = "red";
+        msg.textContent = "Passwords do not match ❌";
+        msg.style.color = "red";
       }
-    }
+    });
 
-    // Register Function
-    function register() {
-      let username = document.getElementById("regUsername").value.trim();
-      let name = document.getElementById("regName").value.trim();
-      let dob = document.getElementById("regDob").value;
-      let email = document.getElementById("regEmail").value.trim();
-      let password = document.getElementById("regPassword").value.trim();
-      let confirmPassword = document.getElementById("regConfirmPassword").value.trim();
+    // Username restriction (no spaces)
+    document.getElementById("regUsername").addEventListener("input", function() {
+      this.value = this.value.replace(/\s/g, '');
+    });
 
-      let registerMessage = document.getElementById("registerMessage");
+    // Register
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("regUsername").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const dob = document.getElementById("regDOB").value;
+      const password = document.getElementById("regPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
 
-      if (!username || !name || !dob || !email || !password || !confirmPassword) {
-        registerMessage.innerHTML = "⚠️ Please fill all fields.";
-        registerMessage.style.color = "red";
+      if (new Date(dob) > new Date()) {
+        showPopup("DOB cannot be in the future ❌", false);
         return;
       }
-
-      // DOB check (must not be in the future)
-      let birthDate = new Date(dob);
-      let today = new Date();
-      if (birthDate > today) {
-        registerMessage.innerHTML = "⚠️ DOB cannot be in the future.";
-        registerMessage.style.color = "red";
-        return;
-      }
-
-      // Confirm password check
       if (password !== confirmPassword) {
-        registerMessage.innerHTML = "⚠️ Passwords do not match.";
-        registerMessage.style.color = "red";
+        showPopup("Passwords do not match ❌", false);
         return;
       }
 
-      // Prevent duplicate usernames
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-      if (users.some(u => u.username === username)) {
-        registerMessage.innerHTML = "⚠️ Username already exists.";
-        registerMessage.style.color = "red";
+      if (localStorage.getItem(username)) {
+        showPopup("Username already exists ❌", false);
         return;
       }
 
-      users.push({ username, name, dob, email, password });
-      localStorage.setItem("users", JSON.stringify(users));
+      const userData = { username, email, dob, password };
+      localStorage.setItem(username, JSON.stringify(userData));
+      showPopup("Registration successful ✅");
+      toggleForm("loginForm");
+    });
 
-      registerMessage.innerHTML = "✅ Registration successful!";
-      registerMessage.style.color = "green";
+    // Login
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value;
 
-      setTimeout(() => showLogin(), 1000);
-    }
-
-    // Login Function
-    function login() {
-      let username = document.getElementById("loginUsername").value.trim();
-      let password = document.getElementById("loginPassword").value.trim();
-
-      let loginMessage = document.getElementById("loginMessage");
-
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-      let user = users.find(u => u.username === username && u.password === password);
-
-      if (user) {
-        loginMessage.innerHTML = "";
-        showNotification("Login successful 🎉");
-        setTimeout(() => {
-          window.location.href = "main.html"; // Redirect after login
-        }, 1500);
+      const userData = JSON.parse(localStorage.getItem(username));
+      if (userData && userData.password === password) {
+        localStorage.setItem("currentUser", username);
+        showPopup("Login successful ✅");
+        setTimeout(() => window.location.href = "main.html", 1000);
       } else {
-        loginMessage.innerHTML = "❌ Invalid username or password.";
-        loginMessage.style.color = "red";
+        showPopup("Invalid username or password ❌", false);
       }
-    }
-
-    // Popup Notification
-    function showNotification(message) {
-      let notification = document.getElementById("notification");
-      notification.textContent = message;
-      notification.classList.add("show");
-
-      setTimeout(() => {
-        notification.classList.remove("show");
-      }, 3000);
-    }
-
-    // Restrict username (no spaces, allow backspace/delete)
-    function restrictUsernameInput(inputId) {
-      document.getElementById(inputId).addEventListener("keydown", function(e) {
-        if (e.key === " ") {   // Block spaces only
-          e.preventDefault();
-        }
-      });
-    }
-
-    restrictUsernameInput("regUsername");
-    restrictUsernameInput("loginUsername");
-
-    // Set max date for DOB input to today
-    window.onload = function() {
-      let today = new Date().toISOString().split("T")[0];
-      document.getElementById("regDob").setAttribute("max", today);
-    };
+    });
   </script>
 </body>
 </html>

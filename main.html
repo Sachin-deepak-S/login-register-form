@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+    }
+
+    /* Header */
+    header {
+      background: #0072ff;
+      color: #fff;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    header .user-info {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      font-weight: normal;
+    }
+    header button {
+      background: #ff4b5c;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    header button:hover {
+      background: #d43f4a;
+    }
+
+    /* Layout */
+    .main-content {
+      flex: 1;
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Calendar */
+    .calendar {
+      flex: 2;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      padding: 20px;
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .calendar-header h2 {
+      margin: 0;
+    }
+    .calendar-header button {
+      background: #0072ff;
+      border: none;
+      padding: 6px 12px;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .calendar-header button:hover {
+      background: #0056b3;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+    }
+    .day-header {
+      font-weight: bold;
+      color: #0072ff;
+    }
+    .day {
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #f5f5f5;
+      transition: 0.3s;
+    }
+    .day:hover {
+      background: #0072ff;
+      color: #fff;
+    }
+    .today {
+      border: 2px solid #0072ff;
+    }
+
+    /* Events */
+    .events {
+      flex: 1;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      padding: 20px;
+    }
+    .events h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+    .event-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+    .event-item {
+      background: #f0f4ff;
+      padding: 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      resize: none;
+    }
+    button.add-event {
+      margin-top: 8px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #0072ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.add-event:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      Welcome, <span id="userName"></span> 🎉
+      <div class="user-info">
+        <span>Email: <span id="userEmail"></span></span>
+        <span>DOB: <span id="userDOB"></span></span>
+      </div>
+    </div>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <div class="main-content">
+    <!-- Calendar -->
+    <div class="calendar">
+      <div class="calendar-header">
+        <button onclick="prevMonth()">⏮ Prev</button>
+        <h2 id="monthYear"></h2>
+        <button onclick="nextMonth()">Next ⏭</button>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <!-- Events -->
+    <div class="events">
+      <h3 id="selectedDate">Select a date</h3>
+      <div class="event-list" id="eventList"></div>
+      <textarea id="eventInput" rows="3" placeholder="Add a note or event..."></textarea>
+      <button class="add-event" onclick="addEvent()">Add Event</button>
+    </div>
+  </div>
+
+  <script>
+    // Check login
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+      alert("No user logged in. Redirecting...");
+      window.location.href = "index.html";
+    }
+
+    // Get user details
+    const userData = JSON.parse(localStorage.getItem(currentUser));
+    document.getElementById("userName").textContent = userData.username;
+    document.getElementById("userEmail").textContent = userData.email;
+    document.getElementById("userDOB").textContent = userData.dob;
+
+    // Logout
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "index.html";
+    }
+
+    // Calendar
+    const monthYear = document.getElementById("monthYear");
+    const calendarGrid = document.getElementById("calendarGrid");
+    const eventList = document.getElementById("eventList");
+    const eventInput = document.getElementById("eventInput");
+    const selectedDateEl = document.getElementById("selectedDate");
+
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+    let selectedDate = null;
+
+    const months = [
+      "January","February","March","April","May","June",
+      "July","August","September","October","November","December"
+    ];
+    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+    function renderCalendar(month, year) {
+      calendarGrid.innerHTML = "";
+      monthYear.textContent = `${months[month]} ${year}`;
+
+      // Week headers
+      for (let d of days) {
+        const header = document.createElement("div");
+        header.textContent = d;
+        header.classList.add("day-header");
+        calendarGrid.appendChild(header);
+      }
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Empty spaces
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        calendarGrid.appendChild(empty);
+      }
+
+      // Dates
+      for (let date = 1; date <= daysInMonth; date++) {
+        const cell = document.createElement("div");
+        cell.textContent = date;
+        cell.classList.add("day");
+
+        if (date === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+          cell.classList.add("today");
+        }
+
+        cell.onclick = () => selectDate(date, month, year);
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentMonth, currentYear);
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentMonth, currentYear);
+    }
+
+    function selectDate(date, month, year) {
+      selectedDate = `${year}-${month+1}-${date}`;
+      selectedDateEl.textContent = `Events on ${date} ${months[month]} ${year}`;
+      loadEvents();
+    }
+
+    function loadEvents() {
+      eventList.innerHTML = "";
+      const events = JSON.parse(localStorage.getItem(`${currentUser}_events`)) || {};
+      if (events[selectedDate]) {
+        events[selectedDate].forEach(ev => {
+          const div = document.createElement("div");
+          div.classList.add("event-item");
+          div.textContent = ev;
+          eventList.appendChild(div);
+        });
+      }
+    }
+
+    function addEvent() {
+      if (!selectedDate) {
+        alert("Please select a date first.");
+        return;
+      }
+      const text = eventInput.value.trim();
+      if (!text) return;
+
+      let events = JSON.parse(localStorage.getItem(`${currentUser}_events`)) || {};
+      if (!events[selectedDate]) events[selectedDate] = [];
+      events[selectedDate].push(text);
+
+      localStorage.setItem(`${currentUser}_events`, JSON.stringify(events));
+      eventInput.value = "";
+      loadEvents();
+    }
+
+    renderCalendar(currentMonth, currentYear);
+  </script>
+</body>
+</html>
