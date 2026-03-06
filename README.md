@@ -50,7 +50,7 @@ https://sachin-deepak-s.github.io/login-register-form/
 ---
 
 ## 📂 Project Structure
-
+```
 login-register-form
 │
 ├── index.html        # Main HTML file
@@ -58,19 +58,19 @@ login-register-form
 ├── script.js         # JavaScript logic for switching forms
 ├── images/           # Preview images
 └── README.md         # Project documentation
-
+```
 ---
 
 ## ⚙️ How to Run the Project
 
 1. Clone the repository
-
+```
 git clone https://github.com/Sachin-deepak-S/login-register-form.git
-
+```
 2. Navigate into the project folder
-
+```
 cd login-register-form
-
+```
 3. Open the project
 
 Open `index.html` in your browser.
