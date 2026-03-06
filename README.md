@@ -25,10 +25,6 @@ https://sachin-deepak-s.github.io/login-register-form/
 
 ![Register Preview](images/register.png)
 
-### Form Interface
-
-![Form UI](images/form.png)
-
 > If preview images are not visible, make sure the file names inside the `images` folder match the names used above.
 
 ---
