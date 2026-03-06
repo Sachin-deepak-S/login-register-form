@@ -3,299 +3,396 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login & Register</title>
-
-  <!-- ✅ Font Awesome for Eye Icon -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <title>Nexus • Auth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --card-bg: rgba(255,255,255,0.72);
+      --card-border: rgba(255,255,255,0.9);
+      --input-bg: rgba(255,255,255,0.85);
+      --input-border: rgba(200,180,220,0.4);
+      --input-focus: #f97316;
+      --text-primary: #1a1025;
+      --text-muted: #a394b4;
+      --accent: #f97316;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --btn-grad: linear-gradient(135deg, #f97316, #ec4899);
+      --shadow-card: 0 25px 60px rgba(120,60,180,0.12), 0 8px 20px rgba(0,0,0,0.06);
+      --shadow-btn: 0 10px 30px rgba(249,115,22,0.45);
+      --radius: 28px; --radius-sm: 16px; --radius-pill: 50px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      font-family:'DM Sans',sans-serif; overflow-y:auto; padding:2rem 1rem;
     }
-
-    .container {
-      background: #fff;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-      width: 380px;
-      text-align: center;
-      animation: fadeIn 0.8s ease;
+    .bg-canvas { position:fixed; inset:0; z-index:0; background:linear-gradient(135deg,#fff7ed 0%,#fce7f3 35%,#eff6ff 70%,#f0fdf4 100%); }
+    .orb { position:absolute; border-radius:50%; filter:blur(80px); mix-blend-mode:multiply; animation:drift var(--dur,20s) ease-in-out infinite alternate; opacity:0.55; }
+    .orb-1{width:480px;height:480px;background:#fbbf24;top:-10%;left:-10%;--dur:18s;}
+    .orb-2{width:420px;height:420px;background:#f472b6;top:5%;right:-5%;--dur:22s;animation-direction:alternate-reverse;}
+    .orb-3{width:360px;height:360px;background:#818cf8;bottom:-5%;left:20%;--dur:16s;}
+    .orb-4{width:300px;height:300px;background:#34d399;bottom:10%;right:15%;--dur:25s;animation-direction:alternate-reverse;}
+    @keyframes drift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.97)}100%{transform:translate(20px,-10px) scale(1.02)}}
+    .card {
+      position:relative; z-index:10; width:100%; max-width:440px;
+      background:var(--card-bg); backdrop-filter:blur(24px) saturate(200%);
+      -webkit-backdrop-filter:blur(24px) saturate(200%);
+      border:1.5px solid var(--card-border); border-radius:var(--radius);
+      padding:2.8rem 2.6rem 2.4rem; box-shadow:var(--shadow-card); margin:auto;
+      animation:fadeUp .6s cubic-bezier(.34,1.2,.64,1) both;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 {
-      margin-bottom: 25px;
-      color: #222;
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 12px 14px;
-      padding-right: 45px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-      transition: 0.3s;
-      box-sizing: border-box;
-    }
-
-    .input-group input:focus {
-      border-color: #007BFF;
-      box-shadow: 0 0 6px rgba(0,123,255,0.4);
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 16px;
-      color: #555;
-      user-select: none;
-      transition: 0.3s;
-    }
-
-    .toggle-password:hover {
-      color: #007BFF;
-    }
-
-    .btn {
-      background: linear-gradient(135deg, #007BFF, #0056b3);
-      border: none;
-      color: #fff;
-      padding: 14px;
-      width: 100%;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-    }
-
-    .toggle-link {
-      margin-top: 18px;
-      font-size: 14px;
-      cursor: pointer;
-      color: #007BFF;
-      display: inline-block;
-    }
-
-    .toggle-link:hover {
-      text-decoration: underline;
-    }
-
-    .strength {
-      font-size: 13px;
-      margin-top: -10px;
-      margin-bottom: 10px;
-      text-align: left;
-    }
-
-    .popup {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      color: #fff;
-      display: none;
-      font-size: 14px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      animation: slideIn 0.4s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(50px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
+    .card::before { content:''; position:absolute; inset:0; border-radius:var(--radius); background:linear-gradient(135deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,.1) 100%); pointer-events:none; }
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:2.2rem;}
+    .brand-icon{width:44px;height:44px;background:var(--btn-grad);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(249,115,22,.4);}
+    .brand-name{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;background:var(--btn-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
+    .tab-bar{display:flex;background:rgba(0,0,0,.05);border-radius:var(--radius-pill);padding:5px;margin-bottom:2rem;gap:4px;}
+    .tab-btn{flex:1;padding:.55rem .5rem;border:none;background:transparent;border-radius:var(--radius-pill);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all .3s cubic-bezier(.34,1.4,.64,1);}
+    .tab-btn.active{background:white;color:var(--text-primary);box-shadow:0 3px 12px rgba(0,0,0,.1);font-weight:600;}
+    .form-wrapper{opacity:1;transform:translateY(0);}
+    .form-wrapper.hidden{display:none;}
+    .form-wrapper.fade-in{animation:panelFadeIn .35s cubic-bezier(.34,1.2,.64,1) both;}
+    @keyframes panelFadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .form-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:700;color:var(--text-primary);letter-spacing:-.8px;line-height:1.1;margin-bottom:.4rem;}
+    .form-subtitle{font-size:.92rem;color:var(--text-muted);margin-bottom:2rem;}
+    .input-group{position:relative;margin-bottom:1.1rem;display:flex;align-items:center;}
+    .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);transition:color .2s;pointer-events:none;z-index:2;display:flex;align-items:center;}
+    .input-icon.focused{color:var(--accent);}
+    .input-group input{width:100%;padding:.85rem 1rem .85rem 2.7rem;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text-primary);outline:none;transition:all .25s ease;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+    .input-group input:focus{border-color:var(--input-focus);background:#fff;box-shadow:0 0 0 4px rgba(249,115,22,.12),0 2px 8px rgba(0,0,0,.04);}
+    .toggle-password{position:absolute;right:13px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-muted);z-index:3;padding:4px;display:flex;align-items:center;transition:color .2s;}
+    .toggle-password:hover{color:var(--accent);}
+    .feedback{display:flex;align-items:center;gap:6px;font-size:.78rem;margin-top:-4px;margin-bottom:6px;margin-left:4px;min-height:20px;color:var(--text-muted);}
+    .strength-wrap{margin:4px 0 10px;}
+    .strength-bar{height:5px;background:rgba(0,0,0,.08);border-radius:99px;overflow:hidden;}
+    .strength-fill{height:100%;width:0%;border-radius:99px;background:var(--danger);transition:width .35s ease,background .35s ease;}
+    .strength-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-muted);margin-top:4px;}
+    .criteria-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(0,0,0,.025);border:1px solid rgba(0,0,0,.07);border-radius:var(--radius-sm);padding:14px;margin:6px 0 12px;}
+    .crit{display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--text-muted);transition:color .2s;}
+    .crit.valid{color:var(--success);}
+    .btn-cta{width:100%;padding:1rem;background:var(--btn-grad);border:none;border-radius:var(--radius-sm);color:white;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:var(--shadow-btn);transition:all .3s cubic-bezier(.34,1.4,.64,1);}
+    .btn-cta:hover:not(:disabled){transform:translateY(-3px) scale(1.01);box-shadow:0 18px 40px rgba(249,115,22,.55);}
+    .btn-cta:disabled{opacity:.7;cursor:not-allowed;transform:none;}
+    .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .forgot-link{display:block;text-align:right;font-size:.82rem;color:var(--accent);text-decoration:none;margin-top:-6px;margin-bottom:14px;cursor:pointer;transition:opacity .2s;}
+    .forgot-link:hover{opacity:.75;}
+    .divider{display:flex;align-items:center;gap:10px;margin:1.4rem 0 0;color:var(--text-muted);font-size:.78rem;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.08);}
+    .social-row{display:flex;gap:10px;margin-top:1rem;}
+    .social-btn{flex:1;padding:.65rem;background:white;border:1.5px solid rgba(0,0,0,.08);border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;color:var(--text-primary);transition:all .2s;}
+    .social-btn:hover{background:#f9f9f9;border-color:rgba(0,0,0,.15);transform:translateY(-1px);}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:white;border-radius:var(--radius-pill);padding:.75rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);display:flex;align-items:center;gap:10px;font-size:.9rem;opacity:0;pointer-events:none;z-index:9999;transition:all .4s cubic-bezier(.34,1.4,.64,1);font-family:'DM Sans',sans-serif;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+    .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .toast.success .dot{background:var(--success);}
+    .toast.error .dot{background:var(--danger);}
+    .toast.info .dot{background:var(--accent);}
+    @media(max-width:480px){.card{padding:2rem 1.5rem;}.criteria-grid{grid-template-columns:1fr;}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Login Form -->
-    <form id="loginForm">
-      <h2>Login</h2>
-      <div class="input-group">
-        <input type="text" id="loginUsername" placeholder="Username" required>
-      </div>
-      <div class="input-group">
-        <input type="password" id="loginPassword" placeholder="Password" required>
-        <span class="toggle-password" onclick="togglePassword('loginPassword', this)">
-          <i class="fa-solid fa-eye"></i>
-        </span>
-      </div>
-      <button type="submit" class="btn">Login</button>
-      <p class="toggle-link" onclick="toggleForm('registerForm')">Don't have an account? Register</p>
-    </form>
 
-    <!-- Register Form -->
-    <form id="registerForm" style="display: none;">
-      <h2>Register</h2>
-      <div class="input-group">
-        <input type="text" id="regUsername" placeholder="Username" required>
-      </div>
-      <div class="input-group">
-        <input type="email" id="regEmail" placeholder="Email" required>
-      </div>
-      <div class="input-group">
-        <input type="date" id="regDOB" required>
-      </div>
-      <div class="input-group">
-        <input type="password" id="regPassword" placeholder="Password" required>
-        <span class="toggle-password" onclick="togglePassword('regPassword', this)">
-          <i class="fa-solid fa-eye"></i>
-        </span>
-      </div>
-      <div class="strength" id="strengthMsg"></div>
-      <div class="input-group">
-        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-        <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">
-          <i class="fa-solid fa-eye"></i>
-        </span>
-      </div>
-      <div class="strength" id="confirmMsg"></div>
-      <button type="submit" class="btn">Register</button>
-      <p class="toggle-link" onclick="toggleForm('loginForm')">Already have an account? Login</p>
-    </form>
+<div class="bg-canvas">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div>
+  <div class="orb orb-3"></div><div class="orb orb-4"></div>
+</div>
+
+<!-- ░░ INLINE SVG SPRITE — no CDN dependency ░░ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="ic-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="ic-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+  <symbol id="ic-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></symbol>
+  <symbol id="ic-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="ic-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+  <symbol id="ic-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="ic-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="ic-warn-tri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.29 3.86-8.57 14.88A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3.26L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+</svg>
+
+<div class="card">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg width="22" height="22"><use href="#ic-bolt" stroke="white"/></svg>
+    </div>
+    <span class="brand-name">NEXUS</span>
   </div>
 
-  <!-- Popup -->
-  <div class="popup" id="popup"></div>
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Sign in</button>
+    <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Create account</button>
+  </div>
 
-  <script>
-    // Toggle between forms
-    function toggleForm(formId) {
-      document.getElementById("loginForm").style.display = formId === "loginForm" ? "block" : "none";
-      document.getElementById("registerForm").style.display = formId === "registerForm" ? "block" : "none";
+  <!-- LOGIN -->
+  <div id="loginPanel" class="form-wrapper">
+    <p class="form-title">Welcome back 👋</p>
+    <p class="form-subtitle">Sign in to continue to Nexus.</p>
+    <form id="loginFormEl" novalidate>
+      <div class="input-group">
+        <span class="input-icon" id="iconLoginUser">
+          <svg width="17" height="17"><use href="#ic-user"/></svg>
+        </span>
+        <input type="text" id="loginUsername" placeholder="Username" required
+          onfocus="iconFocus('iconLoginUser')" onblur="iconBlur('iconLoginUser')">
+      </div>
+      <div class="input-group">
+        <span class="input-icon" id="iconLoginPw">
+          <svg width="17" height="17"><use href="#ic-lock"/></svg>
+        </span>
+        <input type="password" id="loginPassword" placeholder="Password" required
+          onfocus="iconFocus('iconLoginPw')" onblur="iconBlur('iconLoginPw')">
+        <span class="toggle-password" id="tglLoginPw" onclick="togglePw('loginPassword','tglLoginPw')">
+          <svg width="18" height="18" id="eyeLoginPw"><use href="#ic-eye"/></svg>
+        </span>
+      </div>
+      <a class="forgot-link" onclick="showToast('Password reset link sent to your email.','info')">Forgot password?</a>
+      <button type="submit" class="btn-cta" id="loginBtn">
+        <span>Sign in</span>
+        <svg width="18" height="18"><use href="#ic-arrow-right" stroke="white"/></svg>
+      </button>
+    </form>
+    <div class="divider">or continue with</div>
+    <div class="social-row">
+      <button class="social-btn" onclick="showToast('Redirecting to Google…','info')">
+        <!-- Google G inline SVG (no CDN) -->
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Google
+      </button>
+      <button class="social-btn" onclick="showToast('Redirecting to GitHub…','info')">
+        <!-- GitHub octocat -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1a1025">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        GitHub
+      </button>
+    </div>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="registerPanel" class="form-wrapper hidden">
+    <p class="form-title">Join Nexus ✨</p>
+    <p class="form-subtitle">Create your account in seconds.</p>
+    <form id="registerFormEl" novalidate>
+      <div class="input-group">
+        <span class="input-icon" id="iconRegUser">
+          <svg width="17" height="17"><use href="#ic-user"/></svg>
+        </span>
+        <input type="text" id="regUsername" placeholder="Username" required
+          onfocus="iconFocus('iconRegUser')" onblur="iconBlur('iconRegUser')">
+      </div>
+      <div class="feedback" id="usernameFb"></div>
+
+      <div class="input-group">
+        <span class="input-icon" id="iconRegEmail">
+          <svg width="17" height="17"><use href="#ic-mail"/></svg>
+        </span>
+        <input type="email" id="regEmail" placeholder="Email address" required
+          onfocus="iconFocus('iconRegEmail')" onblur="iconBlur('iconRegEmail')">
+      </div>
+      <div class="feedback" id="emailFb"></div>
+
+      <div class="input-group">
+        <span class="input-icon" id="iconRegPw">
+          <svg width="17" height="17"><use href="#ic-key"/></svg>
+        </span>
+        <input type="password" id="regPassword" placeholder="Password" required
+          onfocus="iconFocus('iconRegPw')" onblur="iconBlur('iconRegPw')">
+        <span class="toggle-password" id="tglRegPw" onclick="togglePw('regPassword','tglRegPw')">
+          <svg width="18" height="18" id="eyeRegPw"><use href="#ic-eye"/></svg>
+        </span>
+      </div>
+
+      <div class="strength-wrap">
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label"><span id="strengthText">Enter a password</span><span></span></div>
+      </div>
+
+      <div class="criteria-grid">
+        <div class="crit invalid" id="cL"><svg width="14" height="14" id="svgCL"><use href="#ic-x"/></svg> 8+ chars</div>
+        <div class="crit invalid" id="cU"><svg width="14" height="14" id="svgCU"><use href="#ic-x"/></svg> Uppercase</div>
+        <div class="crit invalid" id="cLo"><svg width="14" height="14" id="svgCLo"><use href="#ic-x"/></svg> Lowercase</div>
+        <div class="crit invalid" id="cN"><svg width="14" height="14" id="svgCN"><use href="#ic-x"/></svg> Number</div>
+        <div class="crit invalid" id="cS"><svg width="14" height="14" id="svgCS"><use href="#ic-x"/></svg> Special char</div>
+      </div>
+
+      <div class="input-group">
+        <span class="input-icon" id="iconRegConfirm">
+          <svg width="17" height="17"><use href="#ic-shield"/></svg>
+        </span>
+        <input type="password" id="regConfirm" placeholder="Confirm password" required
+          onfocus="iconFocus('iconRegConfirm')" onblur="iconBlur('iconRegConfirm')">
+        <span class="toggle-password" id="tglRegConfirm" onclick="togglePw('regConfirm','tglRegConfirm')">
+          <svg width="18" height="18" id="eyeRegConfirm"><use href="#ic-eye"/></svg>
+        </span>
+      </div>
+      <div class="feedback" id="confirmFb"></div>
+
+      <button type="submit" class="btn-cta" id="registerBtn">
+        <span>Create account</span>
+        <svg width="18" height="18"><use href="#ic-rocket" stroke="white"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="dot"></div>
+  <span id="toastMsg">Message</span>
+</div>
+
+<script>
+  /* TOAST */
+  let toastTimer;
+  function showToast(msg, type='success') {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.className = `toast ${type} show`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  /* PASSWORD TOGGLE */
+  function togglePw(inputId, btnId) {
+    const inp = document.getElementById(inputId);
+    const isPw = inp.type === 'password';
+    inp.type = isPw ? 'text' : 'password';
+    // Swap the <use href> to the correct eye icon
+    const useEl = document.querySelector(`#${btnId} use`);
+    useEl.setAttribute('href', isPw ? '#ic-eye-off' : '#ic-eye');
+  }
+
+  /* ICON FOCUS COLOR */
+  function iconFocus(id) { document.getElementById(id).classList.add('focused'); }
+  function iconBlur(id)  { document.getElementById(id).classList.remove('focused'); }
+
+  /* TAB SWITCH */
+  function switchTab(tab) {
+    const lp = document.getElementById('loginPanel');
+    const rp = document.getElementById('registerPanel');
+    const show = tab === 'login' ? lp : rp;
+    const hide = tab === 'login' ? rp : lp;
+    hide.classList.add('hidden');
+    show.classList.remove('hidden');
+    show.classList.add('fade-in');
+    show.addEventListener('animationend', () => show.classList.remove('fade-in'), {once:true});
+    document.getElementById('tabLogin').classList.toggle('active', tab==='login');
+    document.getElementById('tabRegister').classList.toggle('active', tab==='register');
+    document.getElementById('loginFormEl').reset();
+    document.getElementById('registerFormEl').reset();
+    ['usernameFb','emailFb','confirmFb'].forEach(id => document.getElementById(id).innerHTML='');
+    document.getElementById('strengthFill').style.width = '0%';
+    document.getElementById('strengthText').textContent = 'Enter a password';
+    ['cL','cU','cLo','cN','cS'].forEach(id => setCrit(id,false));
+  }
+
+  /* CRITERIA HELPER */
+  function setCrit(id, valid) {
+    const el  = document.getElementById(id);
+    const use = el.querySelector('use');
+    el.classList.toggle('valid', valid);
+    el.classList.toggle('invalid', !valid);
+    if (use) {
+      use.setAttribute('href', valid ? '#ic-check' : '#ic-x');
+      el.querySelector('svg').style.stroke = valid ? '#10b981' : '#a394b4';
     }
+  }
 
-    // Password toggle
-    function togglePassword(inputId, icon) {
-      const input = document.getElementById(inputId);
-      const eyeIcon = icon.querySelector("i");
-      if (input.type === "password") {
-        input.type = "text";
-        eyeIcon.classList.remove("fa-eye");
-        eyeIcon.classList.add("fa-eye-slash");
-      } else {
-        input.type = "password";
-        eyeIcon.classList.remove("fa-eye-slash");
-        eyeIcon.classList.add("fa-eye");
-      }
+  /* FEEDBACK SVG ICONS */
+  function fbIcon(type) {
+    const color = {ok:'#10b981', err:'#ef4444', warn:'#f59e0b'}[type];
+    const href  = {ok:'#ic-check', err:'#ic-x', warn:'#ic-warn-tri'}[type];
+    return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><use href="${href}"/></svg>`;
+  }
+
+  /* USERNAME */
+  document.getElementById('regUsername').addEventListener('input', function() {
+    const fb = document.getElementById('usernameFb'), v = this.value.trim();
+    if (!v) { fb.innerHTML=''; return; }
+    if (v.length < 3) fb.innerHTML = fbIcon('warn')+' Min 3 characters';
+    else if (!/^[a-zA-Z0-9_]+$/.test(v)) fb.innerHTML = fbIcon('err')+' Letters, numbers & underscores only';
+    else fb.innerHTML = fbIcon('ok')+' Username looks good';
+  });
+
+  /* EMAIL */
+  document.getElementById('regEmail').addEventListener('input', function() {
+    const fb = document.getElementById('emailFb'), v = this.value.trim();
+    if (!v) { fb.innerHTML=''; return; }
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    fb.innerHTML = ok ? fbIcon('ok')+' Email looks valid' : fbIcon('err')+' Enter a valid email address';
+  });
+
+  /* PASSWORD STRENGTH */
+  document.getElementById('regPassword').addEventListener('input', function() {
+    const v = this.value;
+    const checks = { cL:v.length>=8, cU:/[A-Z]/.test(v), cLo:/[a-z]/.test(v), cN:/[0-9]/.test(v), cS:/[^a-zA-Z0-9]/.test(v) };
+    Object.keys(checks).forEach(id => setCrit(id, checks[id]));
+    const score = Object.values(checks).filter(Boolean).length;
+    const fill  = document.getElementById('strengthFill');
+    fill.style.width = (score/5*100)+'%';
+    fill.style.background = score<=1 ? '#ef4444' : score<=3 ? '#f59e0b' : '#10b981';
+    document.getElementById('strengthText').textContent = score<=1?'Weak':score<=3?'Good':'Strong';
+    const cv = document.getElementById('regConfirm').value;
+    if (cv) validateConfirm(v, cv);
+  });
+
+  /* CONFIRM PASSWORD */
+  function validateConfirm(pw, confirm) {
+    const fb = document.getElementById('confirmFb');
+    if (!confirm) { fb.innerHTML=''; return false; }
+    if (pw !== confirm) { fb.innerHTML = fbIcon('err')+' Passwords do not match'; return false; }
+    fb.innerHTML = fbIcon('ok')+' Passwords match';
+    return true;
+  }
+  document.getElementById('regConfirm').addEventListener('input', function() {
+    validateConfirm(document.getElementById('regPassword').value, this.value);
+  });
+
+  /* LOADING STATE */
+  function setLoading(btnId, loading, defaultHTML) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.innerHTML = loading ? '<div class="spinner"></div><span>Please wait…</span>' : defaultHTML;
+  }
+
+  /* LOGIN SUBMIT */
+  const loginDefault = `<span>Sign in</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-arrow-right"/></svg>`;
+  document.getElementById('loginFormEl').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!document.getElementById('loginUsername').value.trim() || !document.getElementById('loginPassword').value) {
+      showToast('Please fill in all fields.','error'); return;
     }
+    setLoading('loginBtn', true, loginDefault);
+    setTimeout(() => { setLoading('loginBtn',false,loginDefault); showToast('Login successful!','success'); }, 1500);
+  });
 
-    // Popup function
-    function showPopup(message, success = true) {
-      const popup = document.getElementById("popup");
-      popup.textContent = message;
-      popup.style.background = success ? "#28a745" : "#dc3545";
-      popup.style.display = "block";
-      setTimeout(() => popup.style.display = "none", 3000);
-    }
-
-    // Password strength checker
-    document.getElementById("regPassword").addEventListener("input", function() {
-      const val = this.value;
-      const msg = document.getElementById("strengthMsg");
-      if (val.length < 6) {
-        msg.textContent = "Weak ❌";
-        msg.style.color = "red";
-      } else if (val.match(/[A-Z]/) && val.match(/[0-9]/)) {
-        msg.textContent = "Strong ✅";
-        msg.style.color = "green";
-      } else {
-        msg.textContent = "Medium ⚠️";
-        msg.style.color = "orange";
-      }
-    });
-
-    // Confirm password check
-    document.getElementById("confirmPassword").addEventListener("input", function() {
-      const msg = document.getElementById("confirmMsg");
-      if (this.value === document.getElementById("regPassword").value) {
-        msg.textContent = "Passwords match ✅";
-        msg.style.color = "green";
-      } else {
-        msg.textContent = "Passwords do not match ❌";
-        msg.style.color = "red";
-      }
-    });
-
-    // Username restriction (no spaces)
-    document.getElementById("regUsername").addEventListener("input", function() {
-      this.value = this.value.replace(/\s/g, '');
-    });
-
-    // Register
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const username = document.getElementById("regUsername").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
-      const dob = document.getElementById("regDOB").value;
-      const password = document.getElementById("regPassword").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-
-      if (new Date(dob) > new Date()) {
-        showPopup("DOB cannot be in the future ❌", false);
-        return;
-      }
-      if (password !== confirmPassword) {
-        showPopup("Passwords do not match ❌", false);
-        return;
-      }
-
-      if (localStorage.getItem(username)) {
-        showPopup("Username already exists ❌", false);
-        return;
-      }
-
-      const userData = { username, email, dob, password };
-      localStorage.setItem(username, JSON.stringify(userData));
-      showPopup("Registration successful ✅");
-      toggleForm("loginForm");
-    });
-
-    // Login
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const username = document.getElementById("loginUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
-
-      const userData = JSON.parse(localStorage.getItem(username));
-      if (userData && userData.password === password) {
-        localStorage.setItem("currentUser", username);
-        showPopup("Login successful ✅");
-        setTimeout(() => window.location.href = "main.html", 1000);
-      } else {
-        showPopup("Invalid username or password ❌", false);
-      }
-    });
-  </script>
+  /* REGISTER SUBMIT */
+  const registerDefault = `<span>Create account</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-rocket"/></svg>`;
+  document.getElementById('registerFormEl').addEventListener('submit', e => {
+    e.preventDefault();
+    const user    = document.getElementById('regUsername').value.trim();
+    const email   = document.getElementById('regEmail').value.trim();
+    const pw      = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    if (!user||user.length<3)                          { showToast('Username must be at least 3 characters.','error'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))    { showToast('Enter a valid email address.','error'); return; }
+    if (pw.length<8)                                   { showToast('Password must be at least 8 characters.','error'); return; }
+    if (!validateConfirm(pw,confirm))                  { showToast('Passwords do not match.','error'); return; }
+    setLoading('registerBtn', true, registerDefault);
+    setTimeout(() => { setLoading('registerBtn',false,registerDefault); showToast('Account created! Welcome to Nexus 🎉','success'); }, 1800);
+  });
+</script>
 </body>
 </html>
