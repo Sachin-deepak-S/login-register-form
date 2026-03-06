@@ -7,9 +7,11 @@ It can be used as a **frontend template for authentication pages** in web applic
 
 ---
 
-## 🚀 Live Preview
+## 🚀 Live Demo
 
-Run the project locally by opening the `index.html` file in your browser.
+🌐 **View the Project Online**
+
+https://sachin-deepak-s.github.io/login-register-form/
 
 ---
 
@@ -27,7 +29,7 @@ Run the project locally by opening the `index.html` file in your browser.
 
 ![Form UI](images/form.png)
 
-> If the preview images are not visible, make sure the image names inside the `images` folder match the names used above.
+> If preview images are not visible, make sure the file names inside the `images` folder match the names used above.
 
 ---
 
