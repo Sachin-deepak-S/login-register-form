@@ -1,98 +1,119 @@
 # 🔐 Login & Register Form
 
-A clean and interactive **Login and Register Form** built with **HTML, CSS, and JavaScript** — designed for learning and demo purposes.
+A modern **Login and Registration Form UI** built using **HTML, CSS, and JavaScript**.
+This project demonstrates a clean authentication interface with smooth UI transitions and responsive design.
+
+It can be used as a **frontend template for authentication pages** in web applications.
+
+---
+
+## 🚀 Live Preview
+
+Run the project locally by opening the `index.html` file in your browser.
+
+---
+
+## 📸 Preview
+
+### Login Page
+
+![Login Preview](images/login.png)
+
+### Register Page
+
+![Register Preview](images/register.png)
+
+### Form Interface
+
+![Form UI](images/form.png)
+
+> If the preview images are not visible, make sure the image names inside the `images` folder match the names used above.
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|--------|-------------|
-| 🔄 Toggle Forms | Switch seamlessly between Login and Register |
-| 👁 Password Toggle | Show or hide password with a click |
-| 🔒 Strength Checker | Real-time password strength: Weak / Medium / Strong |
-| ✅ Confirm Password | Live validation as you type |
-| ⛔ Username Rules | Spaces are not allowed |
-| 📅 Date Validation | Future dates are blocked |
-| 🎉 Notifications | Popup alerts for success and error states |
-| 💾 Persistence | User data saved using `localStorage` |
+* Clean and modern UI design
+* Login and registration forms
+* Smooth form switching animation
+* Responsive layout
+* Simple and lightweight project
+* Beginner-friendly code structure
+* Easy to integrate with backend systems
 
 ---
 
-## 🚀 Live Demo
+## 🛠️ Technologies Used
 
-👉 [Click here to view the site](https://sachin-deepak-s.github.io/login-register-form/)
-
-> If the link doesn't work, enable GitHub Pages:  
-> **Repo Settings → Pages → Source: `main` → `/ (root)`**
-
----
-
-## 📂 How to Use
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/Sachin-deepak-S/login-register-form.git
-   ```
-
-2. **Navigate into the project folder:**
-
-   ```bash
-   cd login-register-form
-   ```
-
-3. **Open `index.html` in your browser** — no build tools or dependencies needed.
-
-4. **Register** a new account, then **log in**.
-
-5. After login, the app redirects to **`main.html`** — make sure this file exists in your repo as the dashboard or welcome page.
+* HTML5
+* CSS3
+* JavaScript
 
 ---
 
-## 🗂 Project Structure
+## 📂 Project Structure
 
-```
-login-register-form/
-├── index.html       # Main entry point (Login & Register UI)
-├── main.html        # Post-login dashboard/welcome page
-├── style.css        # All styles
-└── script.js        # Form logic, validation & localStorage
-```
-
----
-
-## ⚠️ Important Note
-
-> This project is built for **educational and demo purposes only.**  
-> **Do not use `localStorage` for authentication in production apps.**  
-> Real-world authentication requires a backend with **hashed passwords** and a **secure database**.
+login-register-form
+│
+├── index.html        # Main HTML file
+├── style.css         # Styling for the form
+├── script.js         # JavaScript logic for switching forms
+├── images/           # Preview images
+└── README.md         # Project documentation
 
 ---
 
-## 🌟 Planned Improvements
+## ⚙️ How to Run the Project
 
-- [ ] Backend authentication (Node.js, PHP, or Firebase)
-- [ ] Database integration (MySQL or MongoDB)
-- [ ] Email verification & password reset
-- [ ] UI upgrade with Bootstrap or Tailwind CSS
-- [ ] Session management with JWT tokens
+1. Clone the repository
+
+git clone https://github.com/Sachin-deepak-S/login-register-form.git
+
+2. Navigate into the project folder
+
+cd login-register-form
+
+3. Open the project
+
+Open `index.html` in your browser.
+
+---
+
+## 💡 Future Improvements
+
+* Add backend authentication (PHP / Node.js / Firebase)
+* Add form validation
+* Implement password strength indicator
+* Add forgot password functionality
+* Connect to database for storing users
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+Steps to contribute:
+
+1. Fork the repository
+2. Create a new branch
+3. Make improvements
+4. Submit a pull request
+
+---
+
+## 👨‍💻 Author
+
+**Sachin Deepak S**
+
+GitHub
+https://github.com/Sachin-deepak-S
+
+Portfolio
+https://sachin-deepak-s.netlify.app
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
-
-© 2025 **[Sachin-deepak-S](https://github.com/Sachin-deepak-S)**
-
----
-
-## 🙌 Contributing
-
-Contributions, issues, and feature requests are welcome!  
-Feel free to open a [GitHub Issue](https://github.com/Sachin-deepak-S/login-register-form/issues) or submit a pull request.
-
----
-
-<p align="center">Made with ❤️ by Sachin-deepak-S</p>
+This project is open source and available under the **MIT License**.
